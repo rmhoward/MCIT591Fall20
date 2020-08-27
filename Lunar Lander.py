@@ -150,8 +150,8 @@ if altitude <= 0:
     else:
         #Player loses if velocity is greater than 5m/s
         print(landerfailureart)
-        print("You've crashed and burned! Better luck next time!")
+        print("You've crashed and burned after",count,"second. Better luck next time!")
 
 #If the player choses not to play, the program will exit.
 if play == "N":
-    print("Okay. Restart the program if you chNange your mind.")
+    print("Okay. Restart the program if you change your mind.")

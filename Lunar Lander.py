@@ -14,7 +14,8 @@ fuel_burn = 30
 burn_constant = 2.5
 
 
-#Starting art. ASCII Image from lgbeard at https://www.asciiart.eu/space/spaceships.
+#Starting art.
+#ASCII Image from lgbeard at https://www.asciiart.eu/space/spaceships.
 #ASCII Font from http://patorjk.com/software/taag/#p=display&h=0&v=0&f=Big&t=Lunar%20Lander
 
 
@@ -72,22 +73,30 @@ if play == "Y":
         print("You currently have",fuel_remaining,"kg of fuel remaining.")
         print()
 
-        #Get input from player about how much fuel they want to burn.
-        print("How much fuel would you like to burn?")
-        fuel_burn = int(input())
+        #try/except block to prevent the program from quitting if the player enters something other than a numerical value
+        try:
+            #Get input from player about how much fuel they want to burn.
+            print("How much fuel would you like to burn?")
+            fuel_burn = int(input())
 
-        #Increase maneuver count. Used as a high score
-        count += 1
+            #Increase maneuver count. Used as a high score
+            count += 1
 
-        #If the amount the player inputs is larger than the amount of fuel remaining, set the amount of fuel burned equal to what is remaining in the tank.
-        if fuel_burn > fuel_remaining:
-            fuel_burn = fuel_remaining
-        print("-----------------------------------------")
-        fuel_remaining -= fuel_burn
+            #If the amount the player inputs is larger than the amount of fuel remaining, set the amount of fuel burned equal to what is remaining in the tank.
+            if fuel_burn > fuel_remaining:
+                fuel_burn = fuel_remaining
+            print("-----------------------------------------")
+            fuel_remaining -= fuel_burn
 
-        #Velocity and altitude calculations
-        velocity = velocity + 1.6 - (burn_constant*fuel_burn)
-        altitude -= velocity
+            #Velocity and altitude calculations
+            velocity = velocity + 1.6 - (burn_constant*fuel_burn)
+            altitude -= velocity
+
+        except:
+            print("-----------------------------------------------------------")
+            print("Invalid number. Please enter a number betwee 0 and", fuel_remaining)
+            print("-----------------------------------------------------------")
+            continue
 
 #Lander success art from https://www.asciiart.eu/space/spaceships
 landersuccessart = """
@@ -142,6 +151,7 @@ landerfailureart = """
 
 #If altitude is less than or equal to 0m
 if altitude <= 0:
+
     #Player wins if velocity is less than or equal to 5m/s
     if velocity <=5:
         print(landersuccessart)

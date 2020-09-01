@@ -162,25 +162,38 @@ def game():
             print(landersuccessart)
             print("You've landed safely in",count,"seconds at a velocity of",velocity,".")
             print("You had",fuel_remaining,"liters of fuel remaining. Game over.")
+            #Initialize play function to ask player if they want to play again
+            play()
 
         else:
             #Player loses if velocity is greater than 10 m/s
             print(landerfailureart)
             print("You've crashed and burned after",count,"seconds at a velocity of",velocity,".")
             print("You had", fuel_remaining, "liters of fuel remaining. Game over.")
+            # Initialize play function to ask player if they want to play again
+            play()
 
 
+#Ask again function just reruns the play function.
+def askagain():
+    return play()
+
+#Play function
+def play():
     #Ask player if they want to play again
-    play = input("Do you want to play again?")
-    if play == ("Y" or "y"):
+    play = input("Do you want to play again? (Y/N)\n")
+
+    #If the player choses to play, the game restarts.
+    if (play == "y" or play == "Y"):
         game()
 
     #If the player choses not to play, the program will exit.
-    elif play == ("N" or "n"):
+    elif (play == "n" or play == "N"):
         print("Okay. Restart the program if you change your mind.")
 
+    #If the player enters anything but Y,y,N,n, the askagain function is initialized. It will continue to run until they enter a valid input.
     else:
-        print("Enter Y or N")
+        askagain()
 
 #Initialize game
 game()

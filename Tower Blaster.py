@@ -33,10 +33,9 @@ pile and a mystery block.  Choose wisely! The first player to stabilize their to
 
 def setup_bricks():
     main_pile = []
-    discard = []
     for number in range(1,61):
         main_pile.append(number)
-    return (main_pile,discard)
+    return main_pile
 
 
 def shuffle_bricks(bricks):
@@ -45,12 +44,15 @@ def shuffle_bricks(bricks):
 
 
 def check_bricks(main_pile, discard):
-    if len(main_pile) == 0:
-        discard = shuffle_bricks(discard)
-        main_pile = main_pile.extend(discard)
+    if len(main_pile) <= 0:
+        shuffle_bricks(discard)
+        main_pile.extend(discard)
         main_pile_first_element = main_pile[0]
         discard.append(main_pile_first_element)
-        main_pile.pop[0]
+        main_pile.pop(0)
+    else:
+        main_pile = main_pile
+        discard = discard
     return main_pile, discard
 
 
@@ -62,19 +64,17 @@ def check_tower_blaster(tower):
 
 
 def get_top_brick(brick_pile):
-    top_brick = brick_pile[0]
-    del brick_pile[0]
+    top_brick = int(brick_pile[0])
+    brick_pile.pop(0)
     return top_brick
 
 
 def deal_initial_bricks(main_pile):
     computer_tower = []
     human_tower = []
-    while len(human_tower) < 10:
-        computer_tower.append(main_pile[0])
-        main_pile.remove(main_pile[0])
-        human_tower.append(main_pile[0])
-        main_pile.remove(main_pile[0])
+    while len(computer_tower) < 10 and len(human_tower) < 10:
+        computer_tower.insert(0,get_top_brick(main_pile))
+        human_tower.insert(0,get_top_brick(main_pile))
     return (human_tower, computer_tower)
 
 
@@ -157,22 +157,24 @@ def print_tower(tower):
 
 def choose_pile(main_pile, discard):
     while True:
-        pile_choice = input("Type 'D' to take the discard brick, 'M' to take the mystery brick, or 'H' for help.\n")
+        try:
+            pile_choice = input("Type 'D' to take the discard brick, 'M' to take the mystery brick, or 'H' for help.\n")
 
-        if  pile_choice[0] == 'D' or  pile_choice[0] == 'd':
-            discard_pile_brick = get_top_brick(discard)
-            which_pile_picked = "discard"
-            return discard_pile_brick, which_pile_picked
+            if  pile_choice[0] == 'D' or  pile_choice[0] == 'd':
+                discard_pile_brick = get_top_brick(discard)
+                which_pile_picked = "discard"
+                return discard_pile_brick, which_pile_picked
 
-        if  pile_choice[0] == 'M' or  pile_choice[0] == 'm':
-            main_pile_brick = get_top_brick(main_pile)
-            which_pile_picked = "main_pile"
-            return main_pile_brick, which_pile_picked
+            if  pile_choice[0] == 'M' or  pile_choice[0] == 'm':
+                main_pile_brick = get_top_brick(main_pile)
+                which_pile_picked = "main_pile"
+                return main_pile_brick, which_pile_picked
 
-        if pile_choice[0] == 'H' or pile_choice[0] == 'H':
-            print("You can decide to use the known mystery brick")
+            if pile_choice[0] == 'H' or pile_choice[0] == 'H':
+                print("You can decide to use the known mystery brick")
 
-
+        except:
+            print("Please enter 'D', 'M', or 'H'.")
 
 
 def ask_yes_or_no(prompt):
@@ -210,7 +212,7 @@ def main():
     brick_pile = []
 
     print(print_instructions())
-    main_pile,discard = setup_bricks()
+    main_pile = setup_bricks()
     main_pile = shuffle_bricks(main_pile)
 
     #The human and computer towers are created
@@ -242,7 +244,10 @@ def main():
         print("This is your current tower:")
         print(print_tower(human_tower))
         main_pile, discard = check_bricks(main_pile, discard)
-        print("The top card on the discard pile is", get_top_brick(discard), "\n")
+        if len(discard) <= 0:
+            discard.append(main_pile[0])
+            main_pile.pop(0)
+        print("The top card on the discard pile is", discard[0], "\n")
         user_brick, pile_choice = choose_pile(main_pile, discard)
         print("You picked", user_brick, "from the", pile_choice)
         if pile_choice != "discard":
